@@ -1,4 +1,3 @@
-
 # Structure
 
 ```
@@ -17,8 +16,8 @@ Socket send notify to client listening
 # How to run
 Note : use Docker v4.20.0
 ```
-git clone git@github.com:trankyhoathanh/nest_demo_001.git
-cd nest_demo_001
+git clone git@github.com:trankyhoathanh/nest_booking_queue.git
+cd nest_booking_queue
 docker compose up -d
 ```
 

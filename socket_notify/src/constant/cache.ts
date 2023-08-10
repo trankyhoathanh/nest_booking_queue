@@ -1,0 +1,2 @@
+export const CACHE_BOOKING_KEY = 'CACHE_BOOKING';
+

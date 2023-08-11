@@ -32,7 +32,7 @@ Connect
 
 Step 1.2 : Open file index.html on browser
 ```
-Open file html, message receive from server will "Booking current: number" when run stress test.
+Open file html, message receive from server will update to "connected"
 ```
 
 Step 2 : Run stress test

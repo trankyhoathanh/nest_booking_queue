@@ -20,25 +20,34 @@ export class ProcessWorkerBookingCreate {
     async processBooking(job: Job) {
       let bookingCount = 1;
 
-      const cachedBooking = await this.redisService.getValue(CACHE_BOOKING_KEY);
-      if (cachedBooking) {
-        bookingCount = Number.parseInt(cachedBooking) + 1;
-      }
-      await this.redisService.setValue(CACHE_BOOKING_KEY, bookingCount)
-
       // Get new booking number, send to notify Client Worker
       // const cachedBookingCountNotify = await this.redisService.getValue(CACHE_BOOKING_KEY);
       // console.log(`Booking current : ${cachedBookingCountNotify}`);
 
       // Add queue send to Socket Notify Client
-      this.processerNotifyOrder.add(QUEUE_NOTIFY_ORDER, `Booking current : ${bookingCount}`);
-
+      
+      await this.delay(this.between(1000, 2000));
       console.log(job.data);
-      // await this.delay(1500);
+
+      const cachedBooking = await this.redisService.getValue(CACHE_BOOKING_KEY);
+      if (cachedBooking) {
+        bookingCount = Number.parseInt(cachedBooking) + 1;
+      }
+
+      await this.redisService.setValue(CACHE_BOOKING_KEY, bookingCount)
+
+      this.processerNotifyOrder.add(QUEUE_NOTIFY_ORDER, `Booking current : ${bookingCount}`);
+      
       await job.isCompleted();
     }
 
     private delay(ms: number): Promise<void> {
       return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    private between(min: number, max: number) {  
+      return Math.floor(
+        Math.random() * (max - min) + min
+      )
     }
 }

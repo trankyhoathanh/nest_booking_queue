@@ -29,6 +29,12 @@ Create New, choose "WebSocket Request" (Beta)
 Enter server URL : ws://localhost:32000
 Connect
 ```
+
+Step 1.2 : Open file index.html on browser
+```
+Open file html, message receive from server will "Booking current: number" when run stress test.
+```
+
 Step 2 : Run stress test
 ```
 cd test

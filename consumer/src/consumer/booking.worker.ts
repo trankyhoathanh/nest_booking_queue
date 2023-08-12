@@ -28,32 +28,48 @@ export class ProcessWorkerBookingCreate {
     async processBooking(job: Job) {
       let bookingCount = 1;
 
-      // Get new booking number, send to notify Client Worker
-      // const cachedBookingCountNotify = await this.redisService.getValue(CACHE_BOOKING_KEY);
-      // console.log(`Booking current : ${cachedBookingCountNotify}`);
-
-      // Add queue send to Socket Notify Client
-      
+      //////////////////////////////////////////////////
+      // Execute One Booking 
+      // With DB (SQL, NoSQL)
+      //
       await this.delay(this.between(1000, 2000));
       console.log(job.data);
 
+      //////////////////////////////////////////////////
+      // Update caching count
+      //
       const cachedBooking = await this.redisService.getValue(CACHE_BOOKING_KEY);
       if (cachedBooking) {
         bookingCount = Number.parseInt(cachedBooking) + 1;
       }
-
       await this.redisService.setValue(CACHE_BOOKING_KEY, bookingCount)
 
+      //////////////////////////////////////////////////
+      // Add to queue notify
+      // WebSocket Queue : processerNotifyOrder
+      // Socket IO Queue : processerNotifyIOOrder
+      //
       this.processerNotifyOrder.add(QUEUE_NOTIFY_ORDER, `Booking current : ${bookingCount}`);
       this.processerNotifyIOOrder.add(QUEUE_NOTIFY_IO_ORDER, `Booking current : ${bookingCount}`);
       
+      //////////////////////////////////////////////////
+      // Job Complete FIFO
+      //
       await job.isCompleted();
     }
 
+    //////////////////////////////////////////////////
+    // Delay function
+    // Move to Utils Lib later
+    //
     private delay(ms: number): Promise<void> {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    //////////////////////////////////////////////////
+    // Beetwen random function
+    // Move to Utils Lib later
+    //
     private between(min: number, max: number) {  
       return Math.floor(
         Math.random() * (max - min) + min

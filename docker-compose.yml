@@ -46,6 +46,18 @@ services:
       - "32000:3002"
     depends_on:
       - cache
+  
+  service_notify_io:
+    container_name: service_notify_io
+    restart: on-failure
+    build: ./socket_io
+    env_file: ./env/socket_io/.env
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "33000:3003"
+    depends_on:
+      - cache
 
 volumes:
   cache:

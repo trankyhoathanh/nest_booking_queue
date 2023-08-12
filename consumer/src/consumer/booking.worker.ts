@@ -2,7 +2,14 @@ import { InjectQueue, Process, Processor } from "@nestjs/bull";
 import { Injectable } from "@nestjs/common";
 import { Job, Queue } from "bull";
 import { CACHE_BOOKING_KEY } from "src/constant/cache";
-import { PROCESSOR_BOOKING_CREATE, PROCESSOR_NOTIFY_ORDER, QUEUE_BOOKING_CREATE, QUEUE_NOTIFY_ORDER } from "src/constant/queue";
+import {
+  PROCESSOR_BOOKING_CREATE,
+  PROCESSOR_NOTIFY_IO_ORDER,
+  PROCESSOR_NOTIFY_ORDER,
+  QUEUE_BOOKING_CREATE,
+  QUEUE_NOTIFY_IO_ORDER,
+  QUEUE_NOTIFY_ORDER
+} from "src/constant/queue";
 import { RedisService } from "src/redis/redis.service";
 
 @Processor(PROCESSOR_BOOKING_CREATE)
@@ -10,7 +17,8 @@ import { RedisService } from "src/redis/redis.service";
 export class ProcessWorkerBookingCreate {
     constructor(
       private readonly redisService: RedisService,
-      @InjectQueue(PROCESSOR_NOTIFY_ORDER) private readonly processerNotifyOrder: Queue
+      @InjectQueue(PROCESSOR_NOTIFY_ORDER) private readonly processerNotifyOrder: Queue,
+      @InjectQueue(PROCESSOR_NOTIFY_IO_ORDER) private readonly processerNotifyIOOrder: Queue
     ) {}
     
     @Process({
@@ -37,6 +45,7 @@ export class ProcessWorkerBookingCreate {
       await this.redisService.setValue(CACHE_BOOKING_KEY, bookingCount)
 
       this.processerNotifyOrder.add(QUEUE_NOTIFY_ORDER, `Booking current : ${bookingCount}`);
+      this.processerNotifyIOOrder.add(QUEUE_NOTIFY_IO_ORDER, `Booking current : ${bookingCount}`);
       
       await job.isCompleted();
     }

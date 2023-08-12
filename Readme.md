@@ -22,17 +22,31 @@ docker compose up -d
 ```
 
 # How to test
-Step 1 : Connect socket with Postman API (or any way FrontEnd)
+Step 1 : Connect socket with Postman API
 ```
+** Socket Raw
 Open Postman
 Create New, choose "WebSocket Request" (Beta)
+Choose RAW
 Enter server URL : ws://localhost:32000
+Connect
+
+** Socket IO
+Open Postman
+Create New, choose "WebSocket Request" (Beta)
+Choose Socket.IO
+Enter server URL : http://localhost:33000
 Connect
 ```
 
 Step 1.2 : Open file index.html on browser
 ```
-Open file html, message receive from server will update to "connected"
+Will receive message socket with WebSocket
+```
+
+Step 1.3 : Open file index_io.html on browser
+```
+Will receive message socket with Socket.IO
 ```
 
 Step 2 : Run stress test
@@ -40,7 +54,12 @@ Step 2 : Run stress test
 cd test
 yarn
 node stress_queue.js
+
+OR
+
+Click to Order Button from Client
 ```
+
 Result order.txt file.
 This is response of per request.
 

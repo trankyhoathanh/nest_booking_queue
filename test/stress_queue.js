@@ -2,7 +2,7 @@ const fs = require('fs');
 const axios = require('axios');
 
 let file_test = 'order';
-let volume = 300;
+let volume = 50;
 let base_url_request = `http://localhost:30000/booking`;
 let file_name = `${file_test}.txt`
 

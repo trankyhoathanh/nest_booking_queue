@@ -1,4 +1,5 @@
 # Structure
+<img width="982" alt="Screenshot 2023-08-14 at 10 52 16" src="https://github.com/trankyhoathanh/nest_booking_queue/assets/8115919/33de7d85-a22d-4864-a183-3a365cfd34e3">
 
 ```
 Backend API Receive booking (Send to QUEUE)

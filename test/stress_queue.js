@@ -9,11 +9,11 @@ let file_name = `${file_test}.txt`
 executer = () => {
     console.log(`Start at : ${Date.now().toString()}`)
     for (let i = 1; i <= volume; i++) {
-            const identity = "20" + i.toString();
+            const identity = "50" + i.toString();
 
             const data_input = {
-                "product_id": `X${identity}`,
-                "product_name": "Ao ca sa"
+                "code": `X ${identity}`,
+                "name": `Ao ca sa ${identity}`
             }
 
             axios.create({})

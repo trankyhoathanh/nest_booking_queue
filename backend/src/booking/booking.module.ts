@@ -1,9 +1,12 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { BookingController } from './booking.controller';
 import { ConfigModule } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { BookingService } from './booking.service';
 import { PROCESSOR_BOOKING_CREATE } from 'src/constant/queue';
+import { CommonErrorHandlerMiddleware } from 'src/common/common-error-handler.middleware';
+import { CheckBookingMiddleware } from './middlewares';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   imports: [
@@ -20,8 +23,15 @@ import { PROCESSOR_BOOKING_CREATE } from 'src/constant/queue';
   ],
   controllers: [BookingController],
   providers: [
+    CommonErrorHandlerMiddleware,
+    PrismaService,
     BookingService,
   ],
   exports: [BookingService],
 })
-export class BookingModule {}
+
+export class BookingModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CheckBookingMiddleware).forRoutes('/');
+  }
+}

@@ -1,6 +1,7 @@
 import { InjectQueue, Process, Processor } from "@nestjs/bull";
 import { Injectable } from "@nestjs/common";
 import { Job, Queue } from "bull";
+import { BookingService } from "src/booking/booking.service";
 import { CACHE_BOOKING_KEY } from "src/constant/cache";
 import {
   PROCESSOR_BOOKING_CREATE,
@@ -17,6 +18,7 @@ import { RedisService } from "src/redis/redis.service";
 export class ProcessWorkerBookingCreate {
     constructor(
       private readonly redisService: RedisService,
+      private readonly bookingService: BookingService,
       @InjectQueue(PROCESSOR_NOTIFY_ORDER) private readonly processerNotifyOrder: Queue,
       @InjectQueue(PROCESSOR_NOTIFY_IO_ORDER) private readonly processerNotifyIOOrder: Queue
     ) {}
@@ -32,8 +34,16 @@ export class ProcessWorkerBookingCreate {
       // Execute One Booking 
       // With DB (SQL, NoSQL)
       //
-      await this.delay(this.between(1000, 2000));
-      console.log(job.data);
+      
+      // Update Booking Queue
+      const bookingQueueUpdated = await this.bookingService.updateBookingQueue(job.data);
+
+      // Create Booking
+      const booking = { ...bookingQueueUpdated };
+      await this.bookingService.createBooking(booking);
+
+      // Show log
+      console.log(`Updated / Saved --- ${ booking.id }`);
 
       //////////////////////////////////////////////////
       // Update caching count

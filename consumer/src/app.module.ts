@@ -6,6 +6,8 @@ import { PROCESSOR_BOOKING_CREATE, PROCESSOR_NOTIFY_IO_ORDER, PROCESSOR_NOTIFY_O
 import { ProcessWorkerBookingCreate } from './consumer/booking.worker';
 import { RedisModule } from './redis/redis.module';
 import { ConfigModule } from '@nestjs/config';
+import { BookingService } from './booking/booking.service';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
@@ -24,6 +26,11 @@ import { ConfigModule } from '@nestjs/config';
     RedisModule
   ],
   controllers: [AppController],
-  providers: [AppService, ProcessWorkerBookingCreate],
+  providers: [
+    BookingService,
+    AppService,
+    PrismaService,
+    ProcessWorkerBookingCreate
+  ],
 })
 export class AppModule {}

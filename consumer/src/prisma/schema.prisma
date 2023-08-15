@@ -1,0 +1,26 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
+}
+
+model booking {
+  id              String    @id @default(uuid()) @map("_id")
+  code            String
+  name            String
+  executed        Boolean   @default(false)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @default(now())
+}
+
+model booking_queue {
+  id              String    @id @default(uuid()) @map("_id")
+  code            String
+  name            String
+  executed        Boolean   @default(false)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @default(now())
+}
+
+generator client {
+  provider = "prisma-client-js"
+}

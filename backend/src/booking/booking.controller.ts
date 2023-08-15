@@ -1,6 +1,7 @@
 
 import { Controller, Post, Request, Body } from '@nestjs/common';
 import { BookingService } from './booking.service';
+import { BookingQueue } from './dto/booking.interface';
 
 @Controller('booking')
 export class BookingController {
@@ -9,7 +10,7 @@ export class BookingController {
   ) {}
 
   @Post()
-  async booking(@Request() req, @Body() bookingData: any) {
+  async booking(@Body() bookingData: BookingQueue) {
     return await this.bookingService.createBookingToQueue(bookingData);
   }
 }

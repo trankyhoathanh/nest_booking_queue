@@ -28,8 +28,8 @@
 
         sendButton.addEventListener('click', async () => {
             const body = {
-                "product_id": "X001",
-                "product_name": "Ao thun"
+                "code": "X001",
+                "name": "Ao thun"
             };
             $.post("http://localhost:30000/booking", body);
         });
